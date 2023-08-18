@@ -1,5 +1,5 @@
 node('maven') {
-	def appName="hello-world-dot-net-core"
+	def appName="hello-world-dot-net-core-fadli"
 	def projectName="sofyan-test2"
 	def imageRegistry="image-registry.openshift-image-registry.svc:5000"
 
@@ -18,6 +18,7 @@ node('maven') {
             sh "oc start-build ${appName} --from-dir=.  --follow --wait -n ${projectName} || true"
             sh "oc new-app ${appName} --name=${appName} -n ${projectName} || true"
             sh "oc tag ${projectName}/${appName}:latest ${projectName}/${appName}:${commitHash}"
+	    sh "oc set triggers deployment/${appName} --from-image=${projectName}/${appName}:latest -c ${appName} -n ${projectName} || true "
         }
     }
 }
